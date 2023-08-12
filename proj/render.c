@@ -6,7 +6,7 @@
 /*   By: math42 <math42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/12 17:32:28 by math42            #+#    #+#             */
-/*   Updated: 2023/08/12 17:35:35 by math42           ###   ########.fr       */
+/*   Updated: 2023/08/12 23:16:16 by math42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,37 +51,53 @@ double	fnz(double z[2], double c[2], int n)
 	return (0);
 }
 
-int	render_mandelbrot(t_img *img)
+void	render_background(t_img *img, int color)
 {
-	int		i;
-	int		j;
-	double	x;
-	double	y;
-	double	c[2];
-	double	z[2];
-	double	temp;
+	int	i;
+	int	j;
 
-	j = 0;
-	while (j < WINDOW_WIDTH)
+	i = 0;
+	while (i < WINDOW_HEIGHT)
 	{
-		y = ((double) 4 / WINDOW_HEIGHT) * ((WINDOW_HEIGHT / 2) - j);
-		i = 0;
-		while (i < WINDOW_HEIGHT)
+		j = 0;
+		while (j < WINDOW_WIDTH)
 		{
-			x = ((double) 6 / WINDOW_WIDTH) * (i - (WINDOW_WIDTH / 2));
-			c[0] = x;
-			c[1] = y;
-			z[0] = 0;
-			z[1] = 0;
-			if (sqrt(pow(c[0], 2) + pow(c[1], 2)) < 2) //fnz(1, c, 100) == 0
-			{
-				temp = fnz(z, c, 256);
-				if (temp != 0)
-					img_pix_put(img, i, j, 10 * pow((int)(temp * 100), 2));
-			}
-			i++;
+			img_pix_put(img, j++, i, color);
 		}
-		j++;
+		++i;
+	}
+}
+
+void	set_xy(t_cartesian *cart, int i, int j)
+{
+	double	a;
+	double	b;
+
+	a = (cart->xf - cart->xo) * WINDOW_WIDTH;
+	b = (cart->yf - cart->yo) * WINDOW_HEIGHT;
+	cart->xy[0] = (i + cart->xo) * a;
+	cart->xy[1] = (j + cart->xf) * b;
+	cart->xy[0] = ((double) 6 / WINDOW_WIDTH) * (i - (WINDOW_WIDTH / 2));
+	cart->xy[1] = ((double) 4 / WINDOW_HEIGHT) * ((WINDOW_HEIGHT / 2) - j);
+}
+
+int	render_mandelbrot(t_img *img, t_fractol ft)
+{
+	double		mod;
+
+	while (++ft.j < WINDOW_WIDTH)
+	{
+		ft.i = -1;
+		while (++ft.i < WINDOW_HEIGHT)
+		{
+			set_xy(&(ft.cart), ft.i, ft.j);
+			if (sqrt(pow(ft.cart.xy[0], 2) + pow(ft.cart.xy[1], 2)) < 2)
+			{
+				mod = fnz((double [2]){0, 0}, ft.cart.xy, 16);
+				if (mod != 0)
+					img_pix_put(img, ft.i, ft.j, GREEN_PIXEL);
+			}
+		}
 	}
 	return (0);
 }
@@ -90,7 +106,8 @@ int	render(t_data *data)
 {
 	if (data->win_ptr == NULL)
 		return (1);
-	render_mandelbrot(&data->img);
+	render_background(&data->img, WHITE_PIXEL);
+	render_mandelbrot(&data->img, (t_fractol){{-2, 2, -3, 3, {0, 0}}, -1, -1});
 	mlx_put_image_to_window(data->mlx_ptr,
 		data->win_ptr, data->img.mlx_img, 0, 0);
 

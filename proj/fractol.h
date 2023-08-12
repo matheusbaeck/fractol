@@ -6,7 +6,7 @@
 /*   By: math42 <math42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 02:00:26 by mamagalh@st       #+#    #+#             */
-/*   Updated: 2023/08/12 17:33:56 by math42           ###   ########.fr       */
+/*   Updated: 2023/08/12 23:14:20 by math42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,16 +60,26 @@ typedef struct s_data
 	int		cur_img;
 }	t_data;
 
-typedef struct s_mandelbrot
+typedef struct s_cartesian	
 {
-	int	color_in;
-	int	color_out;
-}	t_mandelbrot;
+	double	xo;
+	double	xf;
+	double	yo;
+	double	yf;
+	double	xy[2];
+}	t_cartesian;
+
+typedef struct s_fractol
+{
+	t_cartesian	cart;
+	int			i;
+	int			j;
+}	t_fractol;
 
 //RENDER
 void	img_pix_put(t_img *img, int x, int y, int color);
 double	fnz(double z[2], double c[2], int n);
-int		render_mandelbrot(t_img *img);
+int		render_mandelbrot(t_img *img, t_fractol ft);
 int		render(t_data *data);
 
 #endif

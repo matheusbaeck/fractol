@@ -6,7 +6,7 @@
 #    By: math42 <math42@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/21 23:11:40 by mamagalh@st       #+#    #+#              #
-#    Updated: 2023/08/12 17:34:12 by math42           ###   ########.fr        #
+#    Updated: 2023/08/12 17:38:23 by math42           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME = fractol
 
 CC = clang
 
-SRCS =  main.c rende.c
+SRCS =  main.c render.c
 
 OBJS = ${SRCS:.c=.o}
 
