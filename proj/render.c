@@ -6,7 +6,7 @@
 /*   By: math42 <math42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/12 17:32:28 by math42            #+#    #+#             */
-/*   Updated: 2023/08/25 14:56:19 by math42           ###   ########.fr       */
+/*   Updated: 2023/08/26 00:22:59 by math42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,15 +51,21 @@ double	fnz(double z[2], double c[2], int n)
 	return (0);
 }
 
-void	set_xy(t_cartesian *cart, double *xy, int i, int j)
+double	set_xy(t_cartesian *cart, double *xy, int i, int j)
 {
-	double	a;
-	double	b;
+	double	scale;
+	double	add;
 
-	a = (cart->xf - cart->xo) / WINDOW_WIDTH;
-	b = (cart->yf - cart->yo) / WINDOW_HEIGHT;
-	xy[0] = cart->xo + a * i;
-	xy[1] = cart->yo + b * j;
+	add = 0;
+	if (WINDOW_HEIGHT < WINDOW_WIDTH)
+		scale = (cart->yf - cart->yo) / WINDOW_HEIGHT;
+	else
+		scale = (cart->xf - cart->xo) / WINDOW_WIDTH;
+	add = ((cart->xf - cart->xo) - (scale * WINDOW_WIDTH)) / 2;
+	xy[0] = cart->xo + add + scale * i;
+	add = ((cart->yf - cart->yo) - (scale * WINDOW_HEIGHT)) / 2;
+	xy[1] = cart->yo + add + scale * j;
+	return (scale);
 }
 
 int	render_mandelbrot(t_data *dt)
@@ -75,10 +81,10 @@ int	render_mandelbrot(t_data *dt)
 		i = -1;
 		while (++i < WINDOW_WIDTH)
 		{
-			set_xy(&dt->cart, xy, i, j);
+			dt->frctl.scale = set_xy(&dt->cart, xy, i, j);
 			if (sqrt(pow(xy[0], 2) + pow(xy[1], 2)) < 2)
 			{
-				mod = fnz((double [2]){0, 0}, xy, 16);
+				mod = fnz((double [2]){0, 0}, xy, dt->frctl.resol);
 				if (mod != 0)
 					img_pix_put(&dt->img, i, j, ((int)mod) * 100);
 				else
@@ -91,11 +97,37 @@ int	render_mandelbrot(t_data *dt)
 	return (0);
 }
 
+int	render_axis(t_data *dt)
+{
+	double		xy[2];
+	int			i;
+	int			j;
+
+	j = -1;
+	while (++j < WINDOW_HEIGHT)
+	{
+		i = -1;
+		while (++i < WINDOW_WIDTH)
+		{
+			dt->frctl.scale = set_xy(&dt->cart, xy, i, j);
+			if ((xy[0] < 0 + dt->frctl.scale && xy[0] >= 0)
+				|| (xy[1] < 0 + dt->frctl.scale && xy[1] >= 0))
+				img_pix_put(&dt->img, i, j, RED_PIXEL);
+			if (sqrt(pow(xy[0], 2) + pow(xy[1], 2)) < 2 + dt->frctl.scale
+				&& sqrt(pow(xy[0], 2) + pow(xy[1], 2)) > 2)
+				img_pix_put(&dt->img, i, j, RED_PIXEL);
+		}
+	}
+	return (0);
+}
+
 int	render(t_data *data)
 {
 	if (data->win_ptr == NULL)
 		return (1);
 	render_mandelbrot(data);
+	if (data->frctl.axis == 1)
+		render_axis(data);
 	mlx_put_image_to_window(data->mlx_ptr,
 		data->win_ptr, data->img.mlx_img, 0, 0);
 

@@ -6,7 +6,7 @@
 /*   By: math42 <math42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 02:00:26 by mamagalh@st       #+#    #+#             */
-/*   Updated: 2023/08/25 14:35:15 by math42           ###   ########.fr       */
+/*   Updated: 2023/08/26 00:05:22 by math42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,18 @@ typedef struct s_cartesian
 	double	xf;
 	double	yo;
 	double	yf;
+	double	x_var;
+	double	y_var;
 }	t_cartesian;
+
+typedef struct s_fractol
+{
+	int		resol;
+	double	z_speed;
+	double	m_speed;
+	double	scale;
+	int		axis;
+}	t_fractol;
 
 typedef struct s_data
 {
@@ -67,13 +78,8 @@ typedef struct s_data
 	int			cur_img;
 	t_img		img;
 	t_cartesian	cart;
+	t_fractol	frctl;
 }	t_data;
-
-typedef struct s_fractol
-{
-	int			i;
-	int			j;
-}	t_fractol;
 
 //RENDER
 void	img_pix_put(t_img *img, int x, int y, int color);
