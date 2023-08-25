@@ -6,7 +6,7 @@
 /*   By: math42 <math42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/12 17:32:28 by math42            #+#    #+#             */
-/*   Updated: 2023/08/14 16:13:10 by math42           ###   ########.fr       */
+/*   Updated: 2023/08/25 14:56:19 by math42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,35 +51,41 @@ double	fnz(double z[2], double c[2], int n)
 	return (0);
 }
 
-void	set_xy(t_cartesian *cart, int i, int j)
+void	set_xy(t_cartesian *cart, double *xy, int i, int j)
 {
 	double	a;
 	double	b;
 
-	a = (cart->xf - cart->xo) * WINDOW_WIDTH;
-	b = (cart->yf - cart->yo) * WINDOW_HEIGHT;
-	cart->xy[0] = (i + cart->xo) * a;
-	cart->xy[1] = (j + cart->xf) * b;
-	cart->xy[0] = ((double) 6 / WINDOW_WIDTH) * (i - (WINDOW_WIDTH / 2));
-	cart->xy[1] = ((double) 4 / WINDOW_HEIGHT) * ((WINDOW_HEIGHT / 2) - j);
+	a = (cart->xf - cart->xo) / WINDOW_WIDTH;
+	b = (cart->yf - cart->yo) / WINDOW_HEIGHT;
+	xy[0] = cart->xo + a * i;
+	xy[1] = cart->yo + b * j;
 }
 
-int	render_mandelbrot(t_img *img, t_fractol ft)
+int	render_mandelbrot(t_data *dt)
 {
+	double		xy[2];
 	double		mod;
+	int			i;
+	int			j;
 
-	while (++ft.j < WINDOW_HEIGHT)
+	j = -1;
+	while (++j < WINDOW_HEIGHT)
 	{
-		ft.i = -1;
-		while (++ft.i < WINDOW_WIDTH)
+		i = -1;
+		while (++i < WINDOW_WIDTH)
 		{
-			set_xy(&(ft.cart), ft.i, ft.j);
-			if (sqrt(pow(ft.cart.xy[0], 2) + pow(ft.cart.xy[1], 2)) < 2)
+			set_xy(&dt->cart, xy, i, j);
+			if (sqrt(pow(xy[0], 2) + pow(xy[1], 2)) < 2)
 			{
-				mod = fnz((double [2]){0, 0}, ft.cart.xy, 5);
+				mod = fnz((double [2]){0, 0}, xy, 16);
 				if (mod != 0)
-					img_pix_put(img, ft.i, ft.j, ((int)mod) * 100);
+					img_pix_put(&dt->img, i, j, ((int)mod) * 100);
+				else
+					img_pix_put(&dt->img, i, j, 0);
 			}
+			else
+				img_pix_put(&dt->img, i, j, 0);
 		}
 	}
 	return (0);
@@ -89,7 +95,7 @@ int	render(t_data *data)
 {
 	if (data->win_ptr == NULL)
 		return (1);
-	render_mandelbrot(&data->img, (t_fractol){{-2, 2, -3, 3, {0, 0}}, -1, -1});
+	render_mandelbrot(data);
 	mlx_put_image_to_window(data->mlx_ptr,
 		data->win_ptr, data->img.mlx_img, 0, 0);
 
