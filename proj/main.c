@@ -6,7 +6,7 @@
 /*   By: math42 <math42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/10 14:10:34 by math42            #+#    #+#             */
-/*   Updated: 2023/08/26 01:21:34 by math42           ###   ########.fr       */
+/*   Updated: 2023/08/27 16:16:26 by math42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,27 +97,32 @@ int	handle_keyrelease(int keysym, t_data *data)
 int	handle_mouse(int button, int x, int y, t_data *data)
 {
 	double	balance;
+	double	scale;
 
-	(*data).cart.x_var = (*data).cart.xo - (*data).cart.xf;
-	(*data).cart.y_var = (*data).cart.yo - (*data).cart.yf;
+	(*data).cart.x_var = (*data).cart.xf - (*data).cart.xo;
+	(*data).cart.y_var = (*data).cart.yf - (*data).cart.yo;
 	if (button == 4)
 	{
-		balance = x / (double) WINDOW_WIDTH;
+		scale = data->frctl.scale / ((*data).cart.x_var / (double) WINDOW_WIDTH);
+		balance = ++x / (double) WINDOW_WIDTH;
 		printf("%d, %d, %f\n", x, y, balance);
-		(*data).cart.xo -= (*data).cart.x_var * (*data).frctl.z_speed * balance;
-		(*data).cart.xf += (*data).cart.x_var * (*data).frctl.z_speed * (1 - balance);
-		balance = y / (double) WINDOW_HEIGHT;
-		(*data).cart.yo -= (*data).cart.y_var * (*data).frctl.z_speed * balance;
-		(*data).cart.yf += (*data).cart.y_var * (*data).frctl.z_speed * (1 - balance);
+		(*data).cart.xo -= (*data).cart.x_var * (*data).frctl.z_speed * balance * scale;
+		(*data).cart.xf += (*data).cart.x_var * (*data).frctl.z_speed * (1 - balance) * scale;
+		scale = data->frctl.scale / ((*data).cart.y_var / (double) WINDOW_HEIGHT);
+		balance = ++y / (double) WINDOW_HEIGHT;
+		(*data).cart.yo -= (*data).cart.y_var * (*data).frctl.z_speed * balance * scale;
+		(*data).cart.yf += (*data).cart.y_var * (*data).frctl.z_speed * (1 - balance) * scale;
 	}
 	if (button == 5)
 	{
-		balance = x / (double) WINDOW_WIDTH;
-		(*data).cart.xo += (*data).cart.x_var * (*data).frctl.z_speed * balance;
-		(*data).cart.xf -= (*data).cart.x_var * (*data).frctl.z_speed * (1 - balance);
-		balance = y / (double) WINDOW_HEIGHT;
-		(*data).cart.yo += (*data).cart.y_var * (*data).frctl.z_speed * balance;
-		(*data).cart.yf -= (*data).cart.y_var * (*data).frctl.z_speed * (1 - balance);
+		scale = data->frctl.scale / ((*data).cart.x_var / (double) WINDOW_WIDTH);
+		balance = ++x / (double) WINDOW_WIDTH;
+		(*data).cart.xo += (*data).cart.x_var * (*data).frctl.z_speed * balance * scale;
+		(*data).cart.xf -= (*data).cart.x_var * (*data).frctl.z_speed * (1 - balance) * scale;
+		scale = data->frctl.scale / ((*data).cart.y_var / (double) WINDOW_HEIGHT);
+		balance = ++y / (double) WINDOW_HEIGHT;
+		(*data).cart.yo += (*data).cart.y_var * (*data).frctl.z_speed * balance * scale;
+		(*data).cart.yf -= (*data).cart.y_var * (*data).frctl.z_speed * (1 - balance) * scale;
 	}
 	return (0);
 }
