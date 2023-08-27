@@ -6,7 +6,7 @@
 /*   By: math42 <math42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 02:00:26 by mamagalh@st       #+#    #+#             */
-/*   Updated: 2023/08/27 15:40:52 by math42           ###   ########.fr       */
+/*   Updated: 2023/08/27 21:24:20 by math42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,13 @@
 # define FRACTOL_H
 
 # include "minilibx-linux/mlx.h"
-# include <X11/X.h>
+# include <complex.h>
+# include <math.h>
 # include <stdlib.h>
 # include <stdio.h>
 # include <string.h>
 # include <X11/X.h>
 # include <X11/keysym.h>
-# include <math.h>
 
 # define WINDOW_WIDTH 600
 # define WINDOW_HEIGHT 400
@@ -64,11 +64,15 @@ typedef struct s_cartesian
 
 typedef struct s_fractol
 {
+	double	z[2];
+	double	c[2];
 	int		resol;
 	double	z_speed;
 	double	m_speed;
 	double	scale;
 	int		axis;
+	int		colour_range;
+	int		colour_add;
 }	t_fractol;
 
 typedef struct s_data
@@ -83,6 +87,7 @@ typedef struct s_data
 
 //RENDER
 void	img_pix_put(t_img *img, int x, int y, int color);
+double	set_xy(t_cartesian *cart, double *xy, int i, int j);
 double	fnz(double z[2], double c[2], int n);
 int		render_mandelbrot(t_data *dt);
 int		render(t_data *data);

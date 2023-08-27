@@ -6,7 +6,7 @@
 /*   By: math42 <math42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/12 17:32:28 by math42            #+#    #+#             */
-/*   Updated: 2023/08/27 15:42:46 by math42           ###   ########.fr       */
+/*   Updated: 2023/08/27 21:33:51 by math42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,15 @@ void	img_pix_put(t_img *img, int x, int y, int color)
 	}
 }
 
-double	fnz(double z[2], double c[2], int n)
+double	fnz(double zo[2], double c[2], int n)
 {
+	double	z[2];
 	int		i;
 	double	temp;
 	double	mod;
+
+	z[0] = zo[0];
+	z[1] = zo[1];
 
 	mod = sqrt(pow(z[0], 2) + pow(z[1], 2));
 	i = -1;
@@ -46,7 +50,7 @@ double	fnz(double z[2], double c[2], int n)
 	}
 	if (i < n)
 	{
-		return (mod + 1);
+		return (mod);
 	}
 	return (0);
 }
@@ -68,6 +72,14 @@ double	set_xy(t_cartesian *cart, double *xy, int i, int j)
 	return (scale);
 }
 
+int	get_colour(double mod, t_fractol frctl)
+{
+	double long	colour;
+
+	colour = (int)(mod * frctl.colour_range + frctl.colour_add) % __INT_MAX__;
+	return (colour);
+}
+
 int	render_mandelbrot(t_data *dt)
 {
 	double		xy[2];
@@ -82,16 +94,16 @@ int	render_mandelbrot(t_data *dt)
 		while (++i < WINDOW_WIDTH)
 		{
 			dt->frctl.scale = set_xy(&dt->cart, xy, i, j);
-			if (sqrt(pow(xy[0], 2) + pow(xy[1], 2)) < 2)
-			{
-				mod = fnz((double [2]){0, 0}, xy, dt->frctl.resol);
-				if (mod != 0)
-					img_pix_put(&dt->img, i, j, ((int)mod) * 100);
-				else
-					img_pix_put(&dt->img, i, j, 0);
-			}
+			// if (sqrt(pow(xy[0], 2) + pow(xy[1], 2)) < 2)
+			// {
+			mod = fnz(dt->frctl.z , xy, dt->frctl.resol);
+			if (mod != 0)
+				img_pix_put(&dt->img, i, j, get_colour(mod, dt->frctl));
 			else
 				img_pix_put(&dt->img, i, j, 0);
+			// }
+			// else
+			// 	img_pix_put(&dt->img, i, j, 0);
 		}
 	}
 	return (0);

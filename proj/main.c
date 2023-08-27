@@ -6,7 +6,7 @@
 /*   By: math42 <math42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/10 14:10:34 by math42            #+#    #+#             */
-/*   Updated: 2023/08/27 16:16:26 by math42           ###   ########.fr       */
+/*   Updated: 2023/08/27 21:27:07 by math42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,34 @@ int	handle_keypress(int keysym, t_data *data)
 		(*data).cart.yo = -3;
 		(*data).cart.yf = 3;
 	}
+	if (keysym == XK_p)
+	{
+		if (data->frctl.colour_range < __INT_MAX__ - 10)
+			data->frctl.colour_range+= 10;
+		else
+			data->frctl.colour_add = 0;
+	}
+	if (keysym == XK_i)
+	{
+		if (data->frctl.colour_range < __INT_MAX__ / 2)
+			data->frctl.colour_range*= 2;
+		else
+			data->frctl.colour_add = 1;
+	}
+	if (keysym == XK_o)
+	{
+		if (data->frctl.colour_add < __INT_MAX__ - 1)
+			data->frctl.colour_add++;
+		else
+			data->frctl.colour_add = 0;
+	}
+	if (keysym == XK_u)
+	{
+		if (data->frctl.colour_add < __INT_MAX__ / 2)
+			data->frctl.colour_add*= 2;
+		else
+			data->frctl.colour_add = 1;
+	}
 	return (0);
 }
 
@@ -105,7 +133,6 @@ int	handle_mouse(int button, int x, int y, t_data *data)
 	{
 		scale = data->frctl.scale / ((*data).cart.x_var / (double) WINDOW_WIDTH);
 		balance = ++x / (double) WINDOW_WIDTH;
-		printf("%d, %d, %f\n", x, y, balance);
 		(*data).cart.xo -= (*data).cart.x_var * (*data).frctl.z_speed * balance * scale;
 		(*data).cart.xf += (*data).cart.x_var * (*data).frctl.z_speed * (1 - balance) * scale;
 		scale = data->frctl.scale / ((*data).cart.y_var / (double) WINDOW_HEIGHT);
@@ -123,6 +150,10 @@ int	handle_mouse(int button, int x, int y, t_data *data)
 		balance = ++y / (double) WINDOW_HEIGHT;
 		(*data).cart.yo += (*data).cart.y_var * (*data).frctl.z_speed * balance * scale;
 		(*data).cart.yf -= (*data).cart.y_var * (*data).frctl.z_speed * (1 - balance) * scale;
+	}
+	if (button == 1)
+	{
+		set_xy(&(data)->cart, data->frctl.z, x, y);
 	}
 	return (0);
 }
@@ -164,7 +195,7 @@ int	main(void)
 	data.img.addr = mlx_get_data_addr(data.img.mlx_img, &data.img.bpp,
 			&data.img.line_len, &data.img.endian);
 	set_cartesian_plan(&data.cart, (t_cartesian){-2, 2, -3, 3, 4, 6});
-	set_freactol(&data.frctl, (t_fractol){3, 0.1, 0.1, 1, 0});
+	set_freactol(&data.frctl, (t_fractol){{0, 0}, {0, 0}, 3, 0.1, 0.1, 1, 0, 100, 0});
 	mlx_loop_hook(data.mlx_ptr, &render, &data);
 	mlx_hook(data.win_ptr, KeyPress, KeyPressMask, &handle_keypress, &data);
 	mlx_hook(data.win_ptr, KeyRelease, KeyReleaseMask, &handle_keyrelease, &data);
