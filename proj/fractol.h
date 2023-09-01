@@ -6,7 +6,7 @@
 /*   By: math42 <math42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 02:00:26 by mamagalh@st       #+#    #+#             */
-/*   Updated: 2023/08/27 21:24:20 by math42           ###   ########.fr       */
+/*   Updated: 2023/08/30 17:01:03 by math42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@
 # include <X11/X.h>
 # include <X11/keysym.h>
 
-# define WINDOW_WIDTH 600
-# define WINDOW_HEIGHT 400
+# define WINDOW_WIDTH 800
+# define WINDOW_HEIGHT 600
 
 enum	e_main_errors {
 	// MAIN
