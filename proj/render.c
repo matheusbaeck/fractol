@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: math42 <math42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mamagalh@student.42madrid.com <mamagalh    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/12 17:32:28 by math42            #+#    #+#             */
-/*   Updated: 2023/08/27 21:33:51 by math42           ###   ########.fr       */
+/*   Updated: 2023/09/11 18:17:43 by mamagalh@st      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,14 +39,14 @@ double	fnz(double zo[2], double c[2], int n)
 	z[0] = zo[0];
 	z[1] = zo[1];
 
-	mod = sqrt(pow(z[0], 2) + pow(z[1], 2));
+	mod = pow(z[0], 2) + pow(z[1], 2);
 	i = -1;
-	while (++i < n && mod < 2)
+	while (++i < n && mod < 4)
 	{
 		temp = z[0];
 		z[0] = (pow(z[0], 2) - pow(z[1], 2)) + c[0];
 		z[1] = (2 * temp * z[1]) + c[1];
-		mod = sqrt(pow(z[0], 2) + pow(z[1], 2));
+		mod = pow(z[0], 2) + pow(z[1], 2);
 	}
 	if (i < n)
 	{

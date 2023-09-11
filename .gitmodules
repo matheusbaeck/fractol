@@ -1,0 +1,3 @@
+[submodule "proj/minilibx"]
+	path = proj/minilibx
+	url = git@github.com:matheusbaeck/minilibx.git

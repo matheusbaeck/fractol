@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: math42 <math42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mamagalh@student.42madrid.com <mamagalh    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/10 14:10:34 by math42            #+#    #+#             */
-/*   Updated: 2023/08/27 21:27:07 by math42           ###   ########.fr       */
+/*   Updated: 2023/09/11 17:44:03 by mamagalh@st      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -197,11 +197,11 @@ int	main(void)
 	set_cartesian_plan(&data.cart, (t_cartesian){-2, 2, -3, 3, 4, 6});
 	set_freactol(&data.frctl, (t_fractol){{0, 0}, {0, 0}, 3, 0.1, 0.1, 1, 0, 100, 0});
 	mlx_loop_hook(data.mlx_ptr, &render, &data);
-	mlx_hook(data.win_ptr, KeyPress, KeyPressMask, &handle_keypress, &data);
-	mlx_hook(data.win_ptr, KeyRelease, KeyReleaseMask, &handle_keyrelease, &data);
+	mlx_hook(data.win_ptr, 2, 0, &handle_keypress, &data);
+	mlx_hook(data.win_ptr, 3, 0, &handle_keyrelease, &data);
 	mlx_mouse_hook(data.win_ptr, &handle_mouse, &data);
 	mlx_loop(data.mlx_ptr);
 	mlx_destroy_image(data.mlx_ptr, data.img.mlx_img);
-	mlx_destroy_display(data.mlx_ptr);
+	//mlx_destroy_display(data.mlx_ptr);
 	free(data.mlx_ptr);
 }

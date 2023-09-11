@@ -3,24 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   fractol.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: math42 <math42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mamagalh@student.42madrid.com <mamagalh    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 02:00:26 by mamagalh@st       #+#    #+#             */
-/*   Updated: 2023/08/30 17:01:03 by math42           ###   ########.fr       */
+/*   Updated: 2023/09/11 17:57:43 by mamagalh@st      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FRACTOL_H
 # define FRACTOL_H
 
-# include "minilibx-linux/mlx.h"
+# include "minilibx/mlx.h"
 # include <complex.h>
 # include <math.h>
 # include <stdlib.h>
 # include <stdio.h>
 # include <string.h>
-# include <X11/X.h>
-# include <X11/keysym.h>
+# include <mlx.h>
 
 # define WINDOW_WIDTH 800
 # define WINDOW_HEIGHT 600
@@ -38,6 +37,50 @@ enum	e_main_errors {
 	OPEN_PIPE = 332,
 	OPEN_FILE = 432
 };
+
+enum	e_keys {
+	XK_Escape = 53,
+	XK_w = 13,
+	XK_s = 1,
+	XK_d = 2,
+	XK_a = 0,
+	XK_Left = 123,
+	XK_Right = 124,
+	XK_Down = 125,
+	XK_Up = 126,
+	XK_k = 39,
+	XK_l = 40,
+
+	XK_Page_Up = 9,
+	XK_Page_Down = 10,
+	
+	XK_c = 12,
+	XK_space = 13,
+	XK_p = 14,
+	XK_i = 15,
+	XK_o = 16,
+	XK_u = 17,
+	
+	XK_x = 19
+};
+
+// enum
+// {
+// 	ON_KEYDOWN = 2,
+// 	ON_KEYUP = 3,
+// 	ON_MOUSEDOWN = 4,
+// 	ON_LCLICK = 1,
+// 	ON_RCLICK = 2,
+// 	ON_MOUSEUP = 5,
+// 	ON_MOUSEMOVE = 6,
+// 	ON_EXPOSE = 12,
+// 	ON_DESTROY = 17,
+// 	J = 38,
+// 	M = 46,
+// 	SPACE = 49,
+// 	L_SHIFT = 257,
+// 	R_SHIFT = 258,
+// };
 
 # define RED_PIXEL 0xFF0000
 # define GREEN_PIXEL 0xFF00

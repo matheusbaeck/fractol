@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: math42 <math42@student.42.fr>              +#+  +:+       +#+         #
+#    By: mamagalh@student.42madrid.com <mamagalh    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/21 23:11:40 by mamagalh@st       #+#    #+#              #
-#    Updated: 2023/08/27 16:18:20 by math42           ###   ########.fr        #
+#    Updated: 2023/09/11 18:08:50 by mamagalh@st      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,13 +18,13 @@ SRCS =  main.c render.c
 
 OBJS = ${SRCS:.c=.o}
 
-CFLAGS = -Wall -Wextra -Werror #-g3 #-fsanitize=address
+CFLAGS = #-Wall -Wextra -Werror #-g3 #-fsanitize=address
 
-LFLAGS = -L minilibx-linux -lX11 -lXext -lmlx -lm
+LFLAGS = -lmlx -framework OpenGL -framework AppKit -L minilibx
 
 all: $(NAME)
 
-$(NAME): libft/libft.a minilibx-linux/libmlx.a $(OBJS)
+$(NAME): minilibx/libmlx.a $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) $(LFLAGS) -o $(NAME)
 	@make clean
 
@@ -32,7 +32,7 @@ libft/libft.a:
 	@make -C libft
 
 minilibx-linux/libmlx.a:
-	@make -C minilibx-linux
+	@make -C minilibx
 
 clean: 
 	@rm -f $(OBJS)
