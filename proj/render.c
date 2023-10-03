@@ -6,13 +6,13 @@
 /*   By: mamagalh@student.42madrid.com <mamagalh    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/12 17:32:28 by math42            #+#    #+#             */
-/*   Updated: 2023/09/11 18:17:43 by mamagalh@st      ###   ########.fr       */
+/*   Updated: 2023/10/03 20:25:54 by mamagalh@st      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fractol.h"
 
-void	img_pix_put(t_img *img, int x, int y, int color)
+void	img_pix_put(t_img *img, int x, int y, unsigned int color)
 {
 	char	*pixel;
 	int		i;
@@ -29,7 +29,7 @@ void	img_pix_put(t_img *img, int x, int y, int color)
 	}
 }
 
-double	fnz(double zo[2], double c[2], int n)
+int	fnz(double zo[2], double c[2], int n)
 {
 	double	z[2];
 	int		i;
@@ -39,18 +39,18 @@ double	fnz(double zo[2], double c[2], int n)
 	z[0] = zo[0];
 	z[1] = zo[1];
 
-	mod = pow(z[0], 2) + pow(z[1], 2);
+	mod = (z[0] * z[0]) + (z[1] * z[1]);
 	i = -1;
 	while (++i < n && mod < 4)
 	{
 		temp = z[0];
-		z[0] = (pow(z[0], 2) - pow(z[1], 2)) + c[0];
+		z[0] = ((z[0] * z[0]) - (z[1] * z[1])) + c[0];
 		z[1] = (2 * temp * z[1]) + c[1];
-		mod = pow(z[0], 2) + pow(z[1], 2);
+		mod = (z[0] * z[0]) + (z[1] * z[1]);
 	}
 	if (i < n)
 	{
-		return (mod);
+		return (i);
 	}
 	return (0);
 }
@@ -83,7 +83,7 @@ int	get_colour(double mod, t_fractol frctl)
 int	render_mandelbrot(t_data *dt)
 {
 	double		xy[2];
-	double		mod;
+	int			mod;
 	int			i;
 	int			j;
 
@@ -94,16 +94,11 @@ int	render_mandelbrot(t_data *dt)
 		while (++i < WINDOW_WIDTH)
 		{
 			dt->frctl.scale = set_xy(&dt->cart, xy, i, j);
-			// if (sqrt(pow(xy[0], 2) + pow(xy[1], 2)) < 2)
-			// {
 			mod = fnz(dt->frctl.z , xy, dt->frctl.resol);
 			if (mod != 0)
-				img_pix_put(&dt->img, i, j, get_colour(mod, dt->frctl));
+				img_pix_put(&dt->img, i, j, (0x010203 * mod * mod) % 0xFFFFFF);
 			else
 				img_pix_put(&dt->img, i, j, 0);
-			// }
-			// else
-			// 	img_pix_put(&dt->img, i, j, 0);
 		}
 	}
 	return (0);

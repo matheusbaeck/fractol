@@ -6,7 +6,7 @@
 /*   By: mamagalh@student.42madrid.com <mamagalh    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/10 14:10:34 by math42            #+#    #+#             */
-/*   Updated: 2023/09/11 17:44:03 by mamagalh@st      ###   ########.fr       */
+/*   Updated: 2023/10/03 20:12:28 by mamagalh@st      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ int	handle_keypress(int keysym, t_data *data)
 	if (keysym == XK_o)
 	{
 		if (data->frctl.colour_add < __INT_MAX__ - 1)
-			data->frctl.colour_add++;
+			data->frctl.colour_add += 0x010101;
 		else
 			data->frctl.colour_add = 0;
 	}
@@ -201,7 +201,9 @@ int	main(void)
 	mlx_hook(data.win_ptr, 3, 0, &handle_keyrelease, &data);
 	mlx_mouse_hook(data.win_ptr, &handle_mouse, &data);
 	mlx_loop(data.mlx_ptr);
-	mlx_destroy_image(data.mlx_ptr, data.img.mlx_img);
+	//mlx_destroy_image(data.mlx_ptr, data.img.mlx_img);
 	//mlx_destroy_display(data.mlx_ptr);
+	printf("end\n");
 	free(data.mlx_ptr);
+	return (0);
 }
