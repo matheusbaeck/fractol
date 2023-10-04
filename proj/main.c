@@ -6,7 +6,7 @@
 /*   By: mamagalh@student.42madrid.com <mamagalh    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/10 14:10:34 by math42            #+#    #+#             */
-/*   Updated: 2023/10/03 20:12:28 by mamagalh@st      ###   ########.fr       */
+/*   Updated: 2023/10/04 23:00:52 by mamagalh@st      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,12 @@
 
 int	handle_keypress(int keysym, t_data *data)
 {
-	(*data).cart.x_var = (*data).cart.xo - (*data).cart.xf;
-	(*data).cart.y_var = (*data).cart.yo - (*data).cart.yf;
+	(*data).cart.x_var = fabs((*data).cart.xo - (*data).cart.xf);
+	(*data).cart.y_var = fabs((*data).cart.yo - (*data).cart.yf);
+	if ((*data).cart.x_var < (*data).cart.y_var)
+		(*data).cart.y_var = (*data).cart.x_var;
+	else
+		(*data).cart.x_var = (*data).cart.y_var;
 	if (keysym == XK_w || keysym == XK_Down)
 	{
 		(*data).cart.yo += (*data).cart.y_var * (*data).frctl.m_speed;
@@ -77,33 +81,44 @@ int	handle_keypress(int keysym, t_data *data)
 		(*data).cart.yo = -3;
 		(*data).cart.yf = 3;
 	}
-	if (keysym == XK_p)
+	if (keysym == XK_t)
 	{
-		if (data->frctl.colour_range < __INT_MAX__ - 10)
-			data->frctl.colour_range+= 10;
-		else
-			data->frctl.colour_add = 0;
+		data->frctl.colour_hue = (data->frctl.colour_hue + 1);
+		printf("hue %i\n", data->frctl.colour_hue);
 	}
-	if (keysym == XK_i)
+	if (keysym == XK_y)
 	{
-		if (data->frctl.colour_range < __INT_MAX__ / 2)
-			data->frctl.colour_range*= 2;
+		if (data->frctl.colour_hue > 1)
+			data->frctl.colour_hue = data->frctl.colour_hue - 1;
 		else
-			data->frctl.colour_add = 1;
-	}
-	if (keysym == XK_o)
-	{
-		if (data->frctl.colour_add < __INT_MAX__ - 1)
-			data->frctl.colour_add += 0x010101;
-		else
-			data->frctl.colour_add = 0;
+			data->frctl.colour_hue = 0;
+		printf("hue %i\n", data->frctl.colour_hue);
 	}
 	if (keysym == XK_u)
 	{
-		if (data->frctl.colour_add < __INT_MAX__ / 2)
-			data->frctl.colour_add*= 2;
+		data->frctl.colour_saturation = (data->frctl.colour_saturation + 1) % 100;
+		printf("saturation %i\n", data->frctl.colour_saturation);
+	}
+	if (keysym == XK_i)
+	{
+		if (data->frctl.colour_saturation > 1)
+			data->frctl.colour_saturation = (data->frctl.colour_saturation - 1);
 		else
-			data->frctl.colour_add = 1;
+			data->frctl.colour_saturation = 100;
+		printf("saturation %i\n", data->frctl.colour_saturation);
+	}
+	if (keysym == XK_o)
+	{
+		data->frctl.colour_value = (data->frctl.colour_value + 1) % 100;
+		printf("value %i\n", data->frctl.colour_value);
+	}
+	if (keysym == XK_p)
+	{
+		if (data->frctl.colour_value > 1)
+			data->frctl.colour_value = (data->frctl.colour_value - 1);
+		else
+			data->frctl.colour_value = 100;
+		printf("value %i\n", data->frctl.colour_value);
 	}
 	return (0);
 }
@@ -114,6 +129,10 @@ int	handle_keyrelease(int keysym, t_data *data)
 	{
 		mlx_destroy_window(data->mlx_ptr, data->win_ptr);
 		data->win_ptr = NULL;
+		mlx_destroy_image(data->mlx_ptr, data->img.mlx_img);
+		//mlx_destroy_display(data->mlx_ptr);
+		free(data->mlx_ptr);
+		exit(0);
 	}
 	if (keysym == XK_x)
 	{
@@ -195,15 +214,11 @@ int	main(void)
 	data.img.addr = mlx_get_data_addr(data.img.mlx_img, &data.img.bpp,
 			&data.img.line_len, &data.img.endian);
 	set_cartesian_plan(&data.cart, (t_cartesian){-2, 2, -3, 3, 4, 6});
-	set_freactol(&data.frctl, (t_fractol){{0, 0}, {0, 0}, 3, 0.1, 0.1, 1, 0, 100, 0});
+	set_freactol(&data.frctl, (t_fractol){{0, 0}, {0, 0}, 3, 0.1, 0.1, 1, 0, 5, 80, 80});
 	mlx_loop_hook(data.mlx_ptr, &render, &data);
 	mlx_hook(data.win_ptr, 2, 0, &handle_keypress, &data);
 	mlx_hook(data.win_ptr, 3, 0, &handle_keyrelease, &data);
 	mlx_mouse_hook(data.win_ptr, &handle_mouse, &data);
 	mlx_loop(data.mlx_ptr);
-	//mlx_destroy_image(data.mlx_ptr, data.img.mlx_img);
-	//mlx_destroy_display(data.mlx_ptr);
-	printf("end\n");
-	free(data.mlx_ptr);
 	return (0);
 }

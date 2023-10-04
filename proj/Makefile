@@ -6,7 +6,7 @@
 #    By: mamagalh@student.42madrid.com <mamagalh    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/21 23:11:40 by mamagalh@st       #+#    #+#              #
-#    Updated: 2023/10/03 17:14:48 by mamagalh@st      ###   ########.fr        #
+#    Updated: 2023/10/04 23:01:31 by mamagalh@st      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ SRCS =  main.c render.c
 
 OBJS = ${SRCS:.c=.o}
 
-CFLAGS = -O3 #-Wall -Wextra -Werror #-g3 #-fsanitize=address
+CFLAGS = -fsanitize=address #-Wall -Wextra -Werror #-g3 #-fsanitize=address
 
 LFLAGS = -lmlx -framework OpenGL -framework AppKit -L minilibx
 

@@ -6,7 +6,7 @@
 /*   By: mamagalh@student.42madrid.com <mamagalh    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/12 17:32:28 by math42            #+#    #+#             */
-/*   Updated: 2023/10/03 20:25:54 by mamagalh@st      ###   ########.fr       */
+/*   Updated: 2023/10/04 21:54:37 by mamagalh@st      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,12 +72,58 @@ double	set_xy(t_cartesian *cart, double *xy, int i, int j)
 	return (scale);
 }
 
-int	get_colour(double mod, t_fractol frctl)
+int hsv_to_rgb(int hue, int saturation, int value)
 {
-	double long	colour;
+    double h = (double)hue / 60.0;
+    double s = (double)saturation / 100.0;
+    double v = (double)value / 100.0;
+    double c = v * s;
+    double x = c * (1 - fabs(fmod(h, 2) - 1));
+    double m = v - c;
+    double r, g, b;
 
-	colour = (int)(mod * frctl.colour_range + frctl.colour_add) % __INT_MAX__;
-	return (colour);
+    if (h >= 0 && h < 1)
+	{
+        r = c;
+        g = x;
+        b = 0;
+    }
+	else if (h >= 1 && h < 2)
+	{
+        r = x;
+        g = c;
+        b = 0;
+    }
+	else if (h >= 2 && h < 3)
+	{
+        r = 0;
+        g = c;
+        b = x;
+    }
+	else if (h >= 3 && h < 4)
+	{
+        r = 0;
+        g = x;
+        b = c;
+    }
+	else if (h >= 4 && h < 5)
+	{
+        r = x;
+        g = 0;
+        b = c;
+    }
+	else 
+	{ // h >= 5 && h < 6
+        r = c;
+        g = 0;
+        b = x;
+    }
+
+    int red = (int)((r + m) * 255.0);
+    int green = (int)((g + m) * 255.0);
+    int blue = (int)((b + m) * 255.0);
+
+    return ((red << 16) | (green << 8) | blue);
 }
 
 int	render_mandelbrot(t_data *dt)
@@ -96,7 +142,7 @@ int	render_mandelbrot(t_data *dt)
 			dt->frctl.scale = set_xy(&dt->cart, xy, i, j);
 			mod = fnz(dt->frctl.z , xy, dt->frctl.resol);
 			if (mod != 0)
-				img_pix_put(&dt->img, i, j, (0x010203 * mod * mod) % 0xFFFFFF);
+				img_pix_put(&dt->img, i, j, hsv_to_rgb((mod * dt->frctl.colour_hue) % 360, dt->frctl.colour_saturation, dt->frctl.colour_value));
 			else
 				img_pix_put(&dt->img, i, j, 0);
 		}

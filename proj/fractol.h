@@ -6,7 +6,7 @@
 /*   By: mamagalh@student.42madrid.com <mamagalh    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 02:00:26 by mamagalh@st       #+#    #+#             */
-/*   Updated: 2023/10/03 17:49:00 by mamagalh@st      ###   ########.fr       */
+/*   Updated: 2023/10/04 21:49:26 by mamagalh@st      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,8 @@ enum	e_keys {
 	XK_i = 34,
 	XK_o = 31,
 	XK_u = 32,
+	XK_t = 17,
+	XK_y = 16,
 	XK_x = 7
 };
 
@@ -111,8 +113,9 @@ typedef struct s_fractol
 	double	m_speed;
 	double	scale;
 	int		axis;
-	int		colour_range;
-	int		colour_add;
+	int		colour_hue;
+	int		colour_saturation;
+	int		colour_value;
 }	t_fractol;
 
 typedef struct s_data
