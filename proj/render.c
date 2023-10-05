@@ -6,7 +6,7 @@
 /*   By: mamagalh@student.42madrid.com <mamagalh    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/12 17:32:28 by math42            #+#    #+#             */
-/*   Updated: 2023/10/04 21:54:37 by mamagalh@st      ###   ########.fr       */
+/*   Updated: 2023/10/05 20:26:08 by mamagalh@st      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,29 +29,33 @@ void	img_pix_put(t_img *img, int x, int y, unsigned int color)
 	}
 }
 
-int	fnz(double zo[2], double c[2], int n)
+
+int	fnz(double zo[2], double c[2], int n, int pow)
 {
 	double	z[2];
+	double	temp[3];
 	int		i;
-	double	temp;
-	double	mod;
+	int		j;
 
 	z[0] = zo[0];
 	z[1] = zo[1];
-
-	mod = (z[0] * z[0]) + (z[1] * z[1]);
 	i = -1;
-	while (++i < n && mod < 4)
+	while (++i < n && (z[0] * z[0]) + (z[1] * z[1]) < 4)
 	{
-		temp = z[0];
-		z[0] = ((z[0] * z[0]) - (z[1] * z[1])) + c[0];
-		z[1] = (2 * temp * z[1]) + c[1];
-		mod = (z[0] * z[0]) + (z[1] * z[1]);
+		temp[0] = z[0];
+		temp[1] = z[1];
+		j = pow;
+		while (--j >= 1)
+		{
+			temp[2] = z[0];
+			z[0] = (z[0] * temp[0] - z[1] * temp[1]);
+			z[1] = (temp[2] * temp[1]) + (temp[0] * z[1]);
+		}
+		z[0] += c[0];
+		z[1] += c[1];
 	}
 	if (i < n)
-	{
 		return (i);
-	}
 	return (0);
 }
 
@@ -140,7 +144,7 @@ int	render_mandelbrot(t_data *dt)
 		while (++i < WINDOW_WIDTH)
 		{
 			dt->frctl.scale = set_xy(&dt->cart, xy, i, j);
-			mod = fnz(dt->frctl.z , xy, dt->frctl.resol);
+			mod = fnz(dt->frctl.z , xy, dt->frctl.resol, dt->frctl.pow);
 			if (mod != 0)
 				img_pix_put(&dt->img, i, j, hsv_to_rgb((mod * dt->frctl.colour_hue) % 360, dt->frctl.colour_saturation, dt->frctl.colour_value));
 			else

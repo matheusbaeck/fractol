@@ -6,7 +6,7 @@
 /*   By: mamagalh@student.42madrid.com <mamagalh    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/10 14:10:34 by math42            #+#    #+#             */
-/*   Updated: 2023/10/04 23:00:52 by mamagalh@st      ###   ########.fr       */
+/*   Updated: 2023/10/05 20:32:13 by mamagalh@st      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,10 @@ int	handle_keypress(int keysym, t_data *data)
 		printf("resolution %d\n", (*data).frctl.resol);
 	}
 	if (keysym == XK_x)
+	{
 		(*data).frctl.axis = 1;
+		data->frctl.click_alowed = 1;
+	}
 	if (keysym == XK_c)
 	{
 		(*data).cart.xo = (*data).cart.x_var / 2;
@@ -120,6 +123,19 @@ int	handle_keypress(int keysym, t_data *data)
 			data->frctl.colour_value = 100;
 		printf("value %i\n", data->frctl.colour_value);
 	}
+	if (keysym == XK_n)
+	{
+		if (data->frctl.pow > 1)
+			data->frctl.pow = (data->frctl.pow - 1);
+		else
+			data->frctl.pow = 1;
+		printf("value %i\n", data->frctl.pow);
+	}
+	if (keysym == XK_m)
+	{
+		data->frctl.pow = (data->frctl.pow + 1);
+		printf("value %i\n", data->frctl.pow);
+	}
 	return (0);
 }
 
@@ -130,13 +146,13 @@ int	handle_keyrelease(int keysym, t_data *data)
 		mlx_destroy_window(data->mlx_ptr, data->win_ptr);
 		data->win_ptr = NULL;
 		mlx_destroy_image(data->mlx_ptr, data->img.mlx_img);
-		//mlx_destroy_display(data->mlx_ptr);
 		free(data->mlx_ptr);
 		exit(0);
 	}
 	if (keysym == XK_x)
 	{
 		(*data).frctl.axis = 0;
+		data->frctl.click_alowed = 0;
 	}
 	return (0);
 }
@@ -170,7 +186,7 @@ int	handle_mouse(int button, int x, int y, t_data *data)
 		(*data).cart.yo += (*data).cart.y_var * (*data).frctl.z_speed * balance * scale;
 		(*data).cart.yf -= (*data).cart.y_var * (*data).frctl.z_speed * (1 - balance) * scale;
 	}
-	if (button == 1)
+	if (button == 1 && data->frctl.click_alowed)
 	{
 		set_xy(&(data)->cart, data->frctl.z, x, y);
 	}
@@ -214,7 +230,7 @@ int	main(void)
 	data.img.addr = mlx_get_data_addr(data.img.mlx_img, &data.img.bpp,
 			&data.img.line_len, &data.img.endian);
 	set_cartesian_plan(&data.cart, (t_cartesian){-2, 2, -3, 3, 4, 6});
-	set_freactol(&data.frctl, (t_fractol){{0, 0}, {0, 0}, 3, 0.1, 0.1, 1, 0, 5, 80, 80});
+	set_freactol(&data.frctl, (t_fractol){{0, 0}, {0, 0}, 3, 0.1, 0.1, 1, 0, 5, 80, 80, 0, 2});
 	mlx_loop_hook(data.mlx_ptr, &render, &data);
 	mlx_hook(data.win_ptr, 2, 0, &handle_keypress, &data);
 	mlx_hook(data.win_ptr, 3, 0, &handle_keyrelease, &data);

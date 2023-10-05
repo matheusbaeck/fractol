@@ -6,7 +6,7 @@
 /*   By: mamagalh@student.42madrid.com <mamagalh    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 02:00:26 by mamagalh@st       #+#    #+#             */
-/*   Updated: 2023/10/04 21:49:26 by mamagalh@st      ###   ########.fr       */
+/*   Updated: 2023/10/05 20:28:54 by mamagalh@st      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,8 @@ enum	e_keys {
 	XK_u = 32,
 	XK_t = 17,
 	XK_y = 16,
+	XK_n = 45,
+	XK_m = 46,
 	XK_x = 7
 };
 
@@ -116,6 +118,8 @@ typedef struct s_fractol
 	int		colour_hue;
 	int		colour_saturation;
 	int		colour_value;
+	int		click_alowed;
+	int		pow;
 }	t_fractol;
 
 typedef struct s_data
@@ -131,7 +135,7 @@ typedef struct s_data
 //RENDER
 void	img_pix_put(t_img *img, int x, int y, unsigned int color);
 double	set_xy(t_cartesian *cart, double *xy, int i, int j);
-int		fnz(double z[2], double c[2], int n);
+int		fnz(double z[2], double c[2], int n, int pow);
 int		render_mandelbrot(t_data *dt);
 int		render(t_data *data);
 
