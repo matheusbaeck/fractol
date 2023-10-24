@@ -6,7 +6,7 @@
 #    By: mamagalh@student.42madrid.com <mamagalh    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/21 23:11:40 by mamagalh@st       #+#    #+#              #
-#    Updated: 2023/10/24 22:40:58 by mamagalh@st      ###   ########.fr        #
+#    Updated: 2023/10/25 01:57:13 by mamagalh@st      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME = fractol
 
 CC = clang
 
-SRCS =  main.c render.c
+SRCS =  main.c render.c handler.c handler_two.c utils.c color.c
 
 OBJS = ${SRCS:.c=.o}
 
