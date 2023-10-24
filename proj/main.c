@@ -6,7 +6,7 @@
 /*   By: mamagalh@student.42madrid.com <mamagalh    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/10 14:10:34 by math42            #+#    #+#             */
-/*   Updated: 2023/10/05 20:32:13 by mamagalh@st      ###   ########.fr       */
+/*   Updated: 2023/10/24 22:56:23 by mamagalh@st      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -221,8 +221,8 @@ int	get_entry(int argc, char **argv)
 		return (1);
 	else if (argc == 2)
 	{
-		if (!(ft_strncmp(argv[1], "Mandelbrot", 11) || ft_strncmp(argv[1], "Mandelbrot3", 12) || ft_strncmp(argv[1], "Julia", 6)))
-			return (printf("fractal not found, try one of the following \n\nMandelbrot\nMandelbrot3\n Julia <param1> <param2>\n"), 1);
+		if (!(!ft_strncmp(argv[1], "Mandelbrot", 11) || !ft_strncmp(argv[1], "Mandelbrot3", 12) || !ft_strncmp(argv[1], "Julia", 6)))
+			return (printf("fractal not found, try one of the following\n\nMandelbrot\nMandelbrot3\nJulia <param1> <param2>\n"), 1);
 	}
 	else if (argc != 4)
 		return (printf("wrong entry\n\n"), 1);
@@ -233,7 +233,7 @@ int	main(int argc, char **argv)
 {
 	t_data	data;
 
-	if (!get_entry(arc, argv))
+	if (get_entry(argc, argv) != 0)
 		return (0);
 	data.mlx_ptr = mlx_init();
 	if (data.mlx_ptr == NULL)
@@ -248,6 +248,8 @@ int	main(int argc, char **argv)
 	set_cartesian_plan(&data.cart, (t_cartesian){-2, 2, -3, 3, 4, 6});
 	if (argc != 4)
 		set_freactol(&data.frctl, (t_fractol){{0, 0}, {0, 0}, 3, 0.1, 0.1, 1, 0, 5, 80, 80, 0, 2});
+	else
+		set_freactol(&data.frctl, (t_fractol){{ft_atoi(argv[2]), ft_atoi(argv[3])}, {0, 0}, 3, 0.1, 0.1, 1, 0, 5, 80, 80, 0, 2});
 	mlx_loop_hook(data.mlx_ptr, &render, &data);
 	mlx_hook(data.win_ptr, 2, 0, &handle_keypress, &data);
 	mlx_hook(data.win_ptr, 3, 0, &handle_keyrelease, &data);

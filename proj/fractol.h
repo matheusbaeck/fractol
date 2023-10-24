@@ -6,7 +6,7 @@
 /*   By: mamagalh@student.42madrid.com <mamagalh    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 02:00:26 by mamagalh@st       #+#    #+#             */
-/*   Updated: 2023/10/05 20:28:54 by mamagalh@st      ###   ########.fr       */
+/*   Updated: 2023/10/24 20:11:11 by mamagalh@st      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define FRACTOL_H
 
 # include "minilibx/mlx.h"
+# include "libft/libft.h"
 # include <complex.h>
 # include <math.h>
 # include <stdlib.h>
@@ -138,5 +139,6 @@ double	set_xy(t_cartesian *cart, double *xy, int i, int j);
 int		fnz(double z[2], double c[2], int n, int pow);
 int		render_mandelbrot(t_data *dt);
 int		render(t_data *data);
+int	get_entry(int argc, char **argv);
 
 #endif

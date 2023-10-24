@@ -1,3 +1,6 @@
 [submodule "proj/minilibx"]
 	path = proj/minilibx
 	url = git@github.com:matheusbaeck/minilibx.git
+[submodule "proj/proj/libft"]
+	path = proj/proj/libft
+	url = git@github.com:matheusbaeck/libft.git
